@@ -6,8 +6,7 @@ CREATE TABLE aluno (
     email VARCHAR(100) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
     data_nascimento DATE,
-    objetivo_prova VARCHAR(100),
-    data_cadastro DATE NOT NULL
+    data_cadastro DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
 -- Tabela Disciplina
@@ -28,7 +27,7 @@ CREATE TABLE professor (
     descricao TEXT,
     valor_hora DECIMAL(10,2),
     avaliacao_media DECIMAL(3,2),
-    data_cadastro DATE
+    data_cadastro DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
 -- Tabela Plano Estudo
@@ -218,4 +217,47 @@ CREATE TABLE alerta_risco (
 
     FOREIGN KEY (id_disciplina)
         REFERENCES disciplina(id_disciplina)
+);
+
+-- Vestibulares 
+
+CREATE TABLE vestibulares (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    sigla TEXT NOT NULL UNIQUE,
+    ativo BOOLEAN DEFAULT 1
+);
+
+-- Relacao aluno vestibular
+
+CREATE TABLE aluno_vestibular (
+    id_aluno INTEGER NOT NULL,
+    id_vestibular INTEGER NOT NULL,
+
+    PRIMARY KEY (id_aluno, id_vestibular),
+
+    FOREIGN KEY (id_aluno)
+        REFERENCES aluno(id_aluno)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (id_vestibular)
+        REFERENCES vestibulares(id)
+        ON DELETE CASCADE
+);
+
+-- Relacao aluno disciplina
+
+CREATE TABLE aluno_disciplina (
+    id_aluno INTEGET NOT NULL,
+    id_disciplina INTEGER NOT NULL,
+
+    PRIMARY KEY (id_aluno, id_disciplina),
+
+    FOREIGN KEY (id_aluno)
+        REFERENCE aluno(id_aluno)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (id_disciplina)
+        REFERENCES disciplina(id_disciplina)
+        ON DELETE CASCADE
 );
